@@ -44,12 +44,14 @@ class FroniusToInflux:
 
     def translate_response(self) -> List[Dict]:
         collection = self.data['Head']['RequestArguments']['DataCollection']
+        FroniusId = self.data['Head']['RequestArguments']['DeviceId']
         timestamp = self.data['Head']['Timestamp']
         if collection == 'CommonInverterData':
             return [
                 {
                     'measurement': 'DeviceStatus',
                     'time': timestamp,
+                    'DeviceID':FroniusId,
                     'fields': {
                         'ErrorCode': self.data['Body']['Data']['DeviceStatus']['ErrorCode'],
                         'LEDColor': self.data['Body']['Data']['DeviceStatus']['LEDColor'],
@@ -62,6 +64,7 @@ class FroniusToInflux:
                 {
                     'measurement': collection,
                     'time': timestamp,
+                    'DeviceID':FroniusId,
                     'fields': {
                         'FAC': self.get_float_or_zero('FAC'),
                         'IAC': self.get_float_or_zero('IAC'),
@@ -80,6 +83,7 @@ class FroniusToInflux:
                 {
                     'measurement': collection,
                     'time': timestamp,
+                    'DeviceID':FroniusId,
                     'fields': {
                         'IAC_L1': self.get_float_or_zero('IAC_L1'),
                         'IAC_L2': self.get_float_or_zero('IAC_L2'),
@@ -95,6 +99,7 @@ class FroniusToInflux:
                 {
                     'measurement': collection,
                     'time': timestamp,
+                    'DeviceID':FroniusId,
                     'fields': {
                         'DAY_PMAX': self.get_float_or_zero('DAY_PMAX'),
                         'DAY_UACMAX': self.get_float_or_zero('DAY_UACMAX'),
